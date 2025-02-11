@@ -12,6 +12,7 @@
             align-items: center;
             height: 100vh;
             background-color: #fafafa;
+            flex-direction: column;
         }
         .login-box {
             background: white;
@@ -49,6 +50,13 @@
             font-size: 12px;
             color: #8e8e8e;
         }
+        .warning-message {
+            color: red;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -59,9 +67,10 @@
         <button onclick="fakeLogin()">Accedi</button>
         <div class="footer">Non hai un account? <a href="#">Iscriviti</a></div>
     </div>
+    <div id="warning" class="warning-message">Se questa fosse stata una pagina di phishing, avresti appena consegnato le tue credenziali a un hacker!</div>
     <script>
         function fakeLogin() {
-            alert("Se questa fosse stata una pagina di phishing, avresti appena consegnato le tue credenziali a un hacker!");
+            document.getElementById("warning").style.display = "block";
         }
     </script>
 </body>
