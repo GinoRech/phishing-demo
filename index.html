@@ -1,79 +1,350 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accedi • Instagram</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #fafafa;
-            flex-direction: column;
-        }
-        .login-box {
-            background: white;
-            padding: 40px;
-            border-radius: 1px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 350px;
-        }
-        .login-box img {
-            width: 175px;
-            margin-bottom: 20px;
-        }
-        input {
-            display: block;
-            width: 100%;
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-            background: #fafafa;
-        }
-        button {
-            background: #3897f0;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: bold;
-        }
-        .footer {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #8e8e8e;
-        }
-        .warning-message {
-            color: red;
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 20px;
-            display: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rimuovi Sfondo Bianco</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --border: #2a2a2a;
+    --accent: #e8ff47;
+    --text: #f0f0f0;
+    --muted: #666;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 48px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .drop-zone {
+    width: 100%;
+    max-width: 600px;
+    border: 2px dashed var(--border);
+    border-radius: 4px;
+    padding: 60px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+  }
+
+  .drop-zone:hover, .drop-zone.drag-over {
+    border-color: var(--accent);
+    background: rgba(232,255,71,0.03);
+  }
+
+  .drop-zone input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+
+  .drop-icon {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .drop-label {
+    font-size: 1rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+  }
+
+  .drop-label strong { color: var(--accent); }
+
+  /* Controls */
+  .controls {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 28px;
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .controls.visible { display: flex; }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .slider-row label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    width: 140px;
+    flex-shrink: 0;
+  }
+
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 2px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+  }
+
+  .val {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    width: 32px;
+    text-align: right;
+  }
+
+  .btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 14px 32px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: transform 0.1s, opacity 0.1s;
+    align-self: flex-start;
+  }
+
+  .btn:hover { opacity: 0.85; }
+  .btn:active { transform: scale(0.98); }
+
+  /* Preview */
+  .preview-area {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 32px;
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .preview-area.visible { display: flex; }
+
+  .preview-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .preview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .preview-box {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    background: repeating-conic-gradient(#1e1e1e 0% 25%, #141414 0% 50%) 0 0 / 20px 20px;
+  }
+
+  .preview-box img, .preview-box canvas {
+    width: 100%;
+    display: block;
+  }
+
+  .download-btn {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 10px 24px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.15s, color 0.15s;
+    text-decoration: none;
+    display: inline-block;
+    align-self: flex-start;
+  }
+
+  .download-btn:hover { background: var(--accent); color: #000; }
+
+  canvas#result { display: none; }
+</style>
 </head>
 <body>
-    <div class="login-box">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram Logo">
-        <input type="text" id="username" placeholder="Nome utente, email o numero di telefono">
-        <input type="password" id="password" placeholder="Password">
-        <button onclick="fakeLogin()">Accedi</button>
-        <div class="footer">Non hai un account? <a href="#">Iscriviti</a></div>
+
+<h1>Rimuovi <span>Sfondo</span> Bianco</h1>
+<p class="subtitle">Elaborazione locale — nessun upload su server</p>
+
+<div class="drop-zone" id="dropZone">
+  <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp">
+  <span class="drop-icon">🖼</span>
+  <p class="drop-label"><strong>Clicca o trascina</strong> un'immagine qui<br>PNG · JPG · WEBP</p>
+</div>
+
+<div class="controls" id="controls">
+  <div class="slider-row">
+    <label>Soglia bianco</label>
+    <input type="range" id="threshold" min="100" max="255" value="200">
+    <span class="val" id="thresholdVal">200</span>
+  </div>
+  <div class="slider-row">
+    <label>Sfumatura bordi</label>
+    <input type="range" id="feather" min="0" max="30" value="5">
+    <span class="val" id="featherVal">5</span>
+  </div>
+  <button class="btn" id="processBtn">Elabora</button>
+</div>
+
+<div class="preview-area" id="previewArea">
+  <span class="preview-label">Anteprima</span>
+  <div class="preview-grid">
+    <div>
+      <p class="preview-label" style="margin-bottom:8px">Originale</p>
+      <div class="preview-box"><img id="originalPreview" src="" alt="originale"></div>
     </div>
-    <div id="warning" class="warning-message">Se questa fosse stata una pagina di phishing, avresti appena consegnato le tue credenziali a un hacker!</div>
-    <script>
-        function fakeLogin() {
-            document.getElementById("warning").style.display = "block";
+    <div>
+      <p class="preview-label" style="margin-bottom:8px">Risultato</p>
+      <div class="preview-box"><canvas id="resultCanvas"></canvas></div>
+    </div>
+  </div>
+  <a class="download-btn" id="downloadBtn" href="#" download="immagine_senza_sfondo.png">⬇ Scarica PNG</a>
+</div>
+
+<script>
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const controls = document.getElementById('controls');
+  const previewArea = document.getElementById('previewArea');
+  const originalPreview = document.getElementById('originalPreview');
+  const resultCanvas = document.getElementById('resultCanvas');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const thresholdSlider = document.getElementById('threshold');
+  const featherSlider = document.getElementById('feather');
+  const thresholdVal = document.getElementById('thresholdVal');
+  const featherVal = document.getElementById('featherVal');
+  const processBtn = document.getElementById('processBtn');
+
+  let currentFile = null;
+  let originalImage = null;
+
+  thresholdSlider.addEventListener('input', () => {
+    thresholdVal.textContent = thresholdSlider.value;
+  });
+  featherSlider.addEventListener('input', () => {
+    featherVal.textContent = featherSlider.value;
+  });
+
+  dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file) loadFile(file);
+  });
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) loadFile(fileInput.files[0]);
+  });
+
+  function loadFile(file) {
+    currentFile = file;
+    const url = URL.createObjectURL(file);
+    originalPreview.src = url;
+    const img = new Image();
+    img.onload = () => {
+      originalImage = img;
+      controls.classList.add('visible');
+      previewArea.classList.add('visible');
+      processImage();
+    };
+    img.src = url;
+  }
+
+  processBtn.addEventListener('click', processImage);
+
+  function processImage() {
+    if (!originalImage) return;
+    const threshold = parseInt(thresholdSlider.value);
+    const feather = parseInt(featherSlider.value);
+
+    const canvas = resultCanvas;
+    canvas.width = originalImage.naturalWidth;
+    canvas.height = originalImage.naturalHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(originalImage, 0, 0);
+
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const d = imgData.data;
+
+    for (let i = 0; i < d.length; i += 4) {
+      const r = d[i], g = d[i+1], b = d[i+2];
+      const brightness = Math.min(r, g, b);
+      const isWhitish = r > threshold && g > threshold && b > threshold;
+
+      if (isWhitish) {
+        if (feather > 0) {
+          // Soft feathering based on how "white" the pixel is
+          const whiteness = (r + g + b) / 3;
+          const alpha = Math.max(0, 1 - (whiteness - threshold) / (255 - threshold));
+          d[i+3] = Math.round(alpha * 255);
+        } else {
+          d[i+3] = 0;
         }
-    </script>
+      }
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+    downloadBtn.href = canvas.toDataURL('image/png');
+
+    const fname = (currentFile?.name || 'immagine').replace(/\.[^.]+$/, '');
+    downloadBtn.download = fname + '_senza_sfondo.png';
+  }
+</script>
 </body>
 </html>
-
-
